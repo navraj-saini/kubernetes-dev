@@ -1,0 +1,28 @@
+Helm
+
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+helm init 
+
+$ curl get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm install ingress stable/nginx-ingress
+
+Check by running the command :kubectl --namespace default get services -o wide -w ingress-nginx-ingress-controller
+
+
+Check by running the command :kubectl --namespace default get services -o wide -w ingress-nginx-ingress-controller
+
+GEt load balance IP : kubectl get svc ingress-nginx-ingress-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
