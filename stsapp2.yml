@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stsapptwo
+  namespace: con
+  labels: 
+    app: myapp
+    type: frontend
+spec:
+  serviceName: "svcapptwo"
+  template:
+    metadata:
+      name: podapptwo
+      labels:
+        app: myapp
+        type: frontend
+    spec:
+      containers:
+       - name: nginx
+         image: nginx
+         imagePullPolicy: "Always"
+         ports: 
+          - containerPort: 80
+#      imagePullSecrets:
+#        - name: dockercred
+  selector:
+    matchLabels:
+       app: myapp
+       type: frontend
+  replicas: 1
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svcapptwo
+  namespace: con
+spec:
+  clusterIP: None
+  ports: 
+   - port: 80
+     targetPort: 80
+  selector:
+    app: myapp
+    type: frontend
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingapptwo
+  namespace: con
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: learnkubernetes.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: svcapptwo
+          servicePort: 80
+        path: /app2
+  tls:
+  - hosts:
+    - learnkubernetes.xyz
+    secretName: stsdepkubepython

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stsappone
+  namespace: test
+  labels: 
+    app: myapp
+    type: frontend
+spec:
+  serviceName: "svcappone"
+  template:
+    metadata:
+      name: podappone
+      labels:
+        app: myapp
+        type: frontend
+    spec:
+      containers:
+       - name: nginx
+         image: nginx
+         imagePullPolicy: "Always"
+         ports: 
+          - containerPort: 80
+#      imagePullSecrets:
+#        - name: dockercred
+  selector:
+    matchLabels:
+       app: myapp
+       type: frontend
+  replicas: 1
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svcappone
+  namespace: test
+spec:
+  clusterIP: None
+  ports: 
+   - port: 80
+     targetPort: 80
+  selector:
+    app: myapp
+    type: frontend
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingappone
+  namespace: test
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: learnkubernetes.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: svcappone
+          servicePort: 80
+        path: /app1
+  tls:
+  - hosts:
+    - learnkubernetes.xyz
+    secretName: stsdepkubepython
