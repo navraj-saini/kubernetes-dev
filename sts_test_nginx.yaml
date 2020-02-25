@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stsapptest
+  namespace: test
+  labels: 
+    app: myapp
+    type: frontend
+spec:
+  serviceName: "svcapptest"
+  template:
+    metadata:
+      name: podapptest
+      labels:
+        app: myapp
+        type: frontend
+    spec:
+      containers:
+       - name: nginx
+         image: navrajs92/kubepython:nslook
+         imagePullPolicy: "Always"
+         ports: 
+          - containerPort: 80
+      imagePullSecrets:
+        - name: dockercred
+  selector:
+    matchLabels:
+       app: myapp
+       type: frontend
+  replicas: 1

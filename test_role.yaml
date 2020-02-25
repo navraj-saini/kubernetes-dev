@@ -1,0 +1,23 @@
+###Test should only list the pods in various namespaces.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-role
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: testrolebinding
+  namespace: test
+subjects:
+- kind: User
+  name: navraj_test
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: test-role
+  apiGroup: ""

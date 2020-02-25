@@ -1,0 +1,69 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: access-policy.test
+  namespace: test
+spec:
+  podSelector:
+    matchLabels:
+       app: myapp
+       type: frontend
+  policyTypes:
+   - Ingress
+   - Egress
+  egress:
+   - {}
+  ingress:
+   - from:
+      - namespaceSelector:
+          matchLabels:
+            deploy: nsappthree.prod
+     ports:
+      - protocol: TCP
+        port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: access-policy.con
+  namespace: con
+spec:
+  podSelector:
+    matchLabels:
+       type: frontend
+       app: myapp
+  policyTypes:
+   - Ingress
+   - Egress
+  egress:
+   - {}
+  ingress:
+   - from:
+      - namespaceSelector:
+          matchLabels:
+            deploy: nsappthree.prod
+     ports:
+      - protocol: TCP
+        port: 80
+        
+        
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: access-policy.prod
+  namespace: prod
+spec:
+  podSelector:
+    matchLabels:
+       type: frontend
+       app: myapp
+  policyTypes:
+   - Ingress
+   - Egress
+  egress:
+   - {}
+  ingress:
+   - {}
+---
+

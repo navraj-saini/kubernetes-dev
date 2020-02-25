@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depappprod
+  namespace: prod
+  labels: 
+    app: myapp
+    type: frontend
+spec:
+#  serviceName: "svcappone"
+  template:
+    metadata:
+      name: podappprod
+      labels:
+        app: myapp
+        type: frontend
+    spec:
+      containers:
+       - name: nginx
+         image: navrajs92/kubepython:nslook
+         imagePullPolicy: "Always"
+         ports: 
+          - containerPort: 80
+      imagePullSecrets:
+        - name: dockercred
+  selector:
+    matchLabels:
+       app: myapp
+       type: frontend
+  replicas: 1

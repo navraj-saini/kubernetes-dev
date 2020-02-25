@@ -1,0 +1,23 @@
+###Admin should have access to overall cluster administration
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: adminrole
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: adminrolebinding
+subjects:
+- kind: User
+  name: navraj_admin
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: adminrole
+  apiGroup: rbac.authorization.k8s.io
